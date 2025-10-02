@@ -1,7 +1,8 @@
 import { Header } from "@/components/Header";
 import { SectorSection } from "@/components/SectorSection";
-import { stocksBySector } from "@/data/stocks";
+import { stocksBySector, allStocks } from "@/data/stocks";
 import { Sparkles, TrendingUp, BarChart3, Zap, Activity } from "lucide-react";
+import Heatmap from "@/components/Heatmap";
 
 const Index = () => {
   return (
@@ -41,6 +42,11 @@ const Index = () => {
             technical, and sentiment indicators. Make smarter investment decisions with data-backed intelligence.
           </p>
           
+          {/* Heatmap */}
+          <div className="max-w-6xl mx-auto w-full pt-6">
+            <Heatmap stocks={allStocks} />
+          </div>
+
           {/* Stats Grid */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-4xl mx-auto pt-8">
             <div className="group p-6 rounded-2xl bg-gradient-to-br from-primary/5 to-primary/10 border border-primary/20 hover:border-primary/40 transition-all hover:scale-105">

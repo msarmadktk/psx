@@ -70,8 +70,8 @@ export const stocksBySector: Record<string, Stock[]> = {
       founded: "1961",
       description: "Pakistan's large state-sector explorer & producer (onshore oil & gas fields).",
       currentPrice: 198.20,
-      change: 4.50,
-      changePercent: 2.32
+      change: 9.91,
+      changePercent: 5.00
     },
     {
       symbol: "MARI",
