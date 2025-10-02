@@ -2,6 +2,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { TrendingUp, TrendingDown, Minus, AlertCircle } from "lucide-react";
+import { useState } from "react";
 
 interface NewsItem {
   title: string;
@@ -139,6 +140,9 @@ const getImpactVariant = (impact: string): "default" | "secondary" | "destructiv
 
 export const SentimentAnalysisDetail = ({ stockSymbol, stockName }: SentimentAnalysisDetailProps) => {
   const newsItems = generateDetailedNews(stockSymbol, stockName);
+  const [expandedItems, setExpandedItems] = useState<Set<number>>(new Set());
+  const [showAll, setShowAll] = useState(false);
+  const visibleNews = showAll ? newsItems : newsItems.slice(0, 5);
   
   const avgCorrectness = (newsItems.reduce((sum, item) => sum + item.correctnessScore, 0) / newsItems.length).toFixed(1);
   const avgImportance = (newsItems.reduce((sum, item) => sum + item.importanceScore, 0) / newsItems.length).toFixed(1);
@@ -236,71 +240,85 @@ export const SentimentAnalysisDetail = ({ stockSymbol, stockName }: SentimentAna
       {/* News Items with Ratings */}
       <div className="space-y-4">
         <h3 className="text-lg font-semibold">Latest News Analysis</h3>
-        {newsItems.map((news, index) => {
+        {visibleNews.map((news, index) => {
+          const absoluteIndex = showAll ? index : index;
           const SentimentIcon = getSentimentIcon(news.sentiment);
           return (
-            <Card key={index} className="hover:border-primary/50 transition-colors">
-              <CardHeader>
-                <div className="flex items-start justify-between gap-4">
-                  <div className="flex-1">
-                    <CardTitle className="text-base mb-2">{news.title}</CardTitle>
-                    <div className="flex items-center gap-3 text-sm text-muted-foreground">
-                      <span>{news.source}</span>
+            <Card key={absoluteIndex} className="hover:border-primary/50 transition-colors">
+              <CardHeader className="pb-2">
+                <div className="flex items-start justify-between gap-3">
+                  <div className="flex-1 min-w-0">
+                    <CardTitle className="text-[15px] md:text-base font-semibold tracking-tight mb-1 leading-snug line-clamp-2">{news.title}</CardTitle>
+                    <div className="flex items-center gap-2 text-xs text-muted-foreground/80">
+                      <span className="truncate">{news.source}</span>
                       <span>•</span>
-                      <span>{news.date}</span>
-                    </div>
-                  </div>
-                  <div className="flex flex-col gap-2 items-end">
-                    <Badge variant={getImpactVariant(news.impact)} className="uppercase">
-                      {news.impact} impact
-                    </Badge>
-                    <div className={`flex items-center gap-1 ${getSentimentColor(news.sentiment)}`}>
-                      <SentimentIcon className="h-4 w-4" />
-                      <span className="text-sm font-medium capitalize">{news.sentiment}</span>
+                      <span className="whitespace-nowrap">{news.date}</span>
                     </div>
                   </div>
                 </div>
               </CardHeader>
-              <CardContent>
-                <p className="text-sm text-muted-foreground mb-4">{news.summary}</p>
-                
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <CardContent className="pt-0">
+                <p className={`text-sm text-muted-foreground ${expandedItems.has(absoluteIndex) ? "" : "line-clamp-2"}`}>{news.summary}</p>
+                <div className="mt-2">
+                  <button
+                    className="text-xs font-medium text-primary hover:underline"
+                    onClick={() => {
+                      const next = new Set(expandedItems);
+                      if (next.has(absoluteIndex)) next.delete(absoluteIndex); else next.add(absoluteIndex);
+                      setExpandedItems(next);
+                    }}
+                  >
+                    {expandedItems.has(absoluteIndex) ? "Show less" : "Show more"}
+                  </button>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
                   <div>
-                    <div className="flex items-center justify-between mb-2">
+                    <div className="flex items-center justify-between mb-1.5">
                       <span className="text-sm font-medium flex items-center gap-2">
                         <AlertCircle className="h-4 w-4" />
-                        Correctness Score
+                        Correctness
                       </span>
                       <span className="text-sm font-bold text-primary">{news.correctnessScore}%</span>
                     </div>
                     <Progress value={news.correctnessScore} className="h-2" />
-                    <p className="text-xs text-muted-foreground mt-1">
-                      {news.correctnessScore >= 90 ? "Highly reliable" : 
-                       news.correctnessScore >= 80 ? "Generally reliable" : 
-                       news.correctnessScore >= 70 ? "Moderately reliable" : "Use caution"}
-                    </p>
                   </div>
                   
                   <div>
-                    <div className="flex items-center justify-between mb-2">
+                    <div className="flex items-center justify-between mb-1.5">
                       <span className="text-sm font-medium flex items-center gap-2">
                         <TrendingUp className="h-4 w-4" />
-                        Importance Score
+                        Importance
                       </span>
                       <span className="text-sm font-bold text-primary">{news.importanceScore}%</span>
                     </div>
                     <Progress value={news.importanceScore} className="h-2" />
-                    <p className="text-xs text-muted-foreground mt-1">
-                      {news.importanceScore >= 85 ? "Critical for trading decisions" : 
-                       news.importanceScore >= 70 ? "Important to consider" : 
-                       news.importanceScore >= 55 ? "Moderate relevance" : "Minor impact"}
-                    </p>
+                  </div>
+                </div>
+
+                <div className="mt-4 flex items-center justify-between text-xs">
+                  <Badge variant={getImpactVariant(news.impact)} className="uppercase">
+                    {news.impact} impact
+                  </Badge>
+                  <div className={`inline-flex items-center gap-1 ${getSentimentColor(news.sentiment)}`}>
+                    <SentimentIcon className="h-4 w-4" />
+                    <span className="font-medium capitalize">{news.sentiment}</span>
                   </div>
                 </div>
               </CardContent>
             </Card>
           );
         })}
+        {newsItems.length > 5 && (
+          <div className="pt-2">
+            <button
+              className="text-sm font-medium text-primary hover:underline"
+              onClick={() => setShowAll(!showAll)}
+            >
+              {showAll ? "Show less articles" : "Show more articles"}
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );

@@ -16,7 +16,7 @@ export const SectorSection = ({ sectorName, stocks }: SectorSectionProps) => {
         <div className="h-1 w-20 bg-gradient-to-r from-primary to-transparent rounded-full"></div>
       </div>
       
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-6">
         {stocks.map((stock) => (
           <StockCard key={stock.symbol} stock={stock} />
         ))}

@@ -8,6 +8,61 @@ All colors MUST be HSL.
 
 @layer base {
   :root {
+    /* Light theme defaults */
+    --background: 0 0% 100%;
+    --foreground: 222 47% 10%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 222 47% 10%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 222 47% 10%;
+
+    --primary: 158 64% 40%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 210 40% 96%;
+    --secondary-foreground: 222 47% 20%;
+
+    --muted: 210 40% 96%;
+    --muted-foreground: 222 10% 35%;
+
+    --accent: 158 64% 40%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+
+    --success: 158 64% 40%;
+    --success-foreground: 0 0% 100%;
+
+    --warning: 43 96% 45%;
+    --warning-foreground: 222 47% 10%;
+
+    --border: 214 32% 91%;
+    --input: 214 32% 91%;
+    --ring: 158 64% 40%;
+
+    --radius: 0.75rem;
+
+    --chart-1: 158 64% 40%;
+    --chart-2: 43 96% 45%;
+    --chart-3: 0 84% 55%;
+    --chart-4: 217 91% 55%;
+    --chart-5: 280 65% 55%;
+
+    --gradient-primary: linear-gradient(135deg, hsl(158 64% 40% / 0.15), hsl(158 64% 40% / 0.05));
+    --gradient-danger: linear-gradient(135deg, hsl(0 84% 60% / 0.15), hsl(0 84% 60% / 0.05));
+    --gradient-warning: linear-gradient(135deg, hsl(43 96% 45% / 0.15), hsl(43 96% 45% / 0.05));
+    
+    --shadow-glow: 0 0 40px hsl(158 64% 40% / 0.15);
+    --shadow-card: 0 10px 30px hsl(222 47% 10% / 0.08);
+    
+    --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .dark {
+    /* Dark theme overrides (original palette) */
     --background: 222 47% 5%;
     --foreground: 210 40% 98%;
 
@@ -42,8 +97,6 @@ All colors MUST be HSL.
     --input: 222 47% 15%;
     --ring: 158 64% 52%;
 
-    --radius: 0.75rem;
-
     --chart-1: 158 64% 52%;
     --chart-2: 43 96% 56%;
     --chart-3: 0 84% 60%;
@@ -56,8 +109,6 @@ All colors MUST be HSL.
     
     --shadow-glow: 0 0 40px hsl(158 64% 52% / 0.15);
     --shadow-card: 0 10px 40px hsl(222 47% 3% / 0.5);
-    
-    --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   }
 }
 
@@ -69,6 +120,7 @@ All colors MUST be HSL.
   body {
     @apply bg-background text-foreground antialiased;
     font-feature-settings: "cv11", "ss01";
+    font-family: "Poppins", ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Noto Sans, Ubuntu, Cantarell, Helvetica Neue, Arial, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
   }
 }
 
